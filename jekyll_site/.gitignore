@@ -1,0 +1,51 @@
+# Ignore Ruby/Bundler files
+Gemfile.lock
+.bundle/
+vendor/
+
+# Ignore Node.js files
+node_modules/
+package-lock.json
+
+# Ignore Python files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Ignore Jekyll build files
+.jekyll-cache/
+.jekyll-metadata
+_site/
+
+# Ignore OS files
+Thumbs.db
+.DS_Store
+
+# Ignore local environment variables
+.env
+.env.local
