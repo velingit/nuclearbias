@@ -1,0 +1,210 @@
+<div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{{ '/assets/energy_data.js' | relative_url }}"></script>
+  <div style="background:#23272a;padding:1em;border-radius:10px;max-width:900px;margin:auto;">
+    <div style="margin-bottom:1em;text-align:center;">
+      <label for="price-series-select" style="color:#e8e6e3;font-weight:bold;margin-right:8px;">Price series:</label>
+      <select id="price-series-select" style="background:#23272a;color:#e8e6e3;border:1px solid #444;border-radius:6px;padding:0.4em 0.6em;">
+        <option value="household">Household price</option>
+        <option value="industrial">Industrial price</option>
+      </select>
+    </div>
+    <div style="margin-bottom:1em;text-align:center;">
+      <label style="color:#e8e6e3;font-weight:bold;">Select countries:</label>
+      <div id="country-checkboxes" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:10px;"></div>
+    </div>
+    <canvas id="energyChart" height="320" style="max-height:320px;"></canvas>
+  </div>
+  <script>
+    const priceSeriesSelect = document.getElementById('price-series-select');
+    const priceSeriesMeta = {
+      household: {
+        label: 'Household Price',
+        field: 'Household_Price_EUR_per_KWH'
+      },
+      industrial: {
+        label: 'Industrial Price',
+        field: 'Industrial_Price_EUR_per_KWH'
+      }
+    };
+
+    // Populate country checkboxes
+    const checkboxContainer = document.getElementById('country-checkboxes');
+    energyData.forEach((c, idx) => {
+      const label = document.createElement('label');
+      label.style.marginRight = '10px';
+      label.style.color = '#e8e6e3';
+      label.style.display = 'flex';
+      label.style.alignItems = 'center';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = idx;
+      checkbox.checked = (c.country === 'Germany');
+      checkbox.style.marginRight = '4px';
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(c.country));
+      checkboxContainer.appendChild(label);
+    });
+
+    function getSelectedCountries() {
+      const checkboxes = checkboxContainer.querySelectorAll('input[type="checkbox"]');
+      return Array.from(checkboxes)
+        .filter(cb => cb.checked)
+        .map(cb => energyData[cb.value]);
+    }
+
+    function getSelectedPriceSeries() {
+      return priceSeriesMeta[priceSeriesSelect.value] || priceSeriesMeta.household;
+    }
+
+    function getAllYears(selected) {
+      // Get the union of all years for selected countries, sorted
+      const yearSet = new Set();
+      selected.forEach(c => c.data.forEach(row => yearSet.add(row.Period)));
+      return Array.from(yearSet).sort((a, b) => a - b);
+    }
+
+    function buildDatasets(selected, years, priceSeries) {
+      return selected.map((country, idx) => ({
+        label: country.country + ' Nuclear (GWh)',
+        data: years.map(y => {
+          const found = country.data.find(row => row.Period == y);
+          return found ? found.Nuclear_Generation_GWh : null;
+        }),
+        borderColor: `hsl(${idx*60},70%,60%)`,
+        backgroundColor: 'transparent',
+        yAxisID: 'y',
+        tension: 0.4,
+        pointRadius: 3,
+        borderWidth: 2
+      })).concat(selected.map((country, idx) => ({
+        label: country.country + ' ' + priceSeries.label + ' (€/kWh)',
+        data: years.map(y => {
+          const found = country.data.find(row => row.Period == y);
+          return found ? found[priceSeries.field] : null;
+        }),
+        borderColor: `hsl(${idx*60+30},70%,60%)`,
+        backgroundColor: 'transparent',
+        yAxisID: 'y1',
+        borderDash: [5,5],
+        tension: 0.4,
+        pointRadius: 3,
+        borderWidth: 2
+      })));
+    }
+
+    let chart;
+    function renderChart() {
+      const selected = getSelectedCountries();
+      if (selected.length === 0) return;
+      const priceSeries = getSelectedPriceSeries();
+      const years = getAllYears(selected);
+      const datasets = buildDatasets(selected, years, priceSeries);
+      if (chart) chart.destroy();
+      chart = new Chart(document.getElementById('energyChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: years, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                color: '#e8e6e3',
+                usePointStyle: true,
+                pointStyle: (ctx) => {
+                  // Use 'line' for all legend items
+                  return 'line';
+                }
+              }
+            },
+            title: {
+              display: true,
+              text: `Nuclear Generation (GWh) and ${priceSeries.label} (€/kWh) Over Time`,
+              color: '#e8e6e3',
+              font: { size: 18 }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              position: 'nearest',
+              yAlign: 'center',
+              xAlign: 'auto',
+              displayColors: false,
+              callbacks: {
+                label: function(context) {
+                  let label = context.dataset.label || '';
+                  if (label) label += ': ';
+                  if (context.parsed.y != null) {
+                    if (label.includes('Nuclear')) {
+                      label += context.parsed.y.toLocaleString(undefined, {maximumFractionDigits:0});
+                    } else {
+                      label += context.parsed.y.toLocaleString(undefined, {maximumFractionDigits:4});
+                    }
+                  }
+                  return label;
+                }
+              },
+              // Custom tooltip positioner to offset tooltips and avoid overlap
+              external: function(context) {
+                // Use default external tooltip handler, but offset each tooltip vertically
+                // Chart.js v3+ only supports one tooltip, so we offset lines instead
+              }
+            },
+            crosshair: {
+              enabled: true,
+              line: {
+                color: '#e8e6e3',
+                width: 1
+              }
+            }
+          },
+          hover: {
+            mode: 'index',
+            intersect: false
+          },
+          scales: {
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              title: { display: true, text: 'Nuclear Generation (GWh)', color: '#e8e6e3' },
+              min: 0,
+              ticks: { color: '#e8e6e3' }
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              title: { display: true, text: `${priceSeries.label} (€/kWh)`, color: '#e8e6e3' },
+              grid: { drawOnChartArea: false },
+              min: 0,
+              // Dynamically set max based on selected data
+              max: (() => {
+                let maxVal = 0.35;
+                if (selected.length > 0) {
+                  maxVal = Math.max(
+                    ...selected.flatMap(c => c.data.map(row => row[priceSeries.field] || 0)),
+                    0.35
+                  );
+                  // Add a little headroom
+                  maxVal = Math.ceil((maxVal + 0.02) * 100) / 100;
+                }
+                return maxVal;
+              })(),
+              ticks: { color: '#e8e6e3' }
+            },
+            x: {
+              title: { display: true, text: 'Year', color: '#e8e6e3' },
+              ticks: { color: '#e8e6e3' }
+            }
+          }
+        }
+      });
+    }
+    checkboxContainer.addEventListener('change', renderChart);
+    priceSeriesSelect.addEventListener('change', renderChart);
+    renderChart();
+  </script>
+</div>

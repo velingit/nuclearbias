@@ -8,90 +8,60 @@ permalink: /nuclear-analysis/
 
 ## Overview
 
-This section presents the relationship between nuclear capacity (as a percentage of total generation) and electricity prices across all European countries included in our study. Data spans from 2000 to 2020.
+This section presents the relationship between nuclear capacity (as a percentage of total generation) and electricity prices across 10 European countries included in our study. Data spans from 2000 to 2020.
+I leave all methodological explanations about price creation to the [Energy prices team from the IEA ](https://www.iea.org/data-and-statistics/data-product/energy-prices)  
 
 ## Scatterplot: Nuclear % vs Price (All Countries)
 
-![Nuclear vs Price Scatterplot](/assets/images/nuclear_vs_price_scatterplot.png)
+<div style="text-align:left;max-width:980px;margin:0 auto 1em auto;">
+  {% include scatterplot_household.html %}
+  <noscript>
+    <img src="{{ '/assets/nuclear_vs_price_scatterplot.png' | relative_url }}" alt="Nuclear vs Price Scatterplot" style="max-width:100%;margin-bottom:0.2em;">
+  </noscript>
+  <div style="font-size:0.97em;color:#FFFFFF;margin-top:0.1em;">Figure 1: Interactive household-price scatterplot. Hover any point to see the exact country, year, nuclear share, and electricity price. The y-axis is synchronized with Figure 2 for direct comparison.</div>
+</div>
 
-**Figure 1**: All data points from 2000-2020 plotted by country color. Opacity increases from 2000 (fainter) to 2020 (solid) to show temporal progression.
+<div style="text-align:left;max-width:980px;margin:0 auto 1em auto;">
+  {% include scatterplot_industrial.html %}
+  <noscript>
+    <img src="{{ '/assets/images/nuclear_vs_industrial_price_scatterplot.png' | relative_url }}" alt="Nuclear vs Industrial Price Scatterplot" style="max-width:100%;margin-bottom:0.2em;">
+  </noscript>
+  <div style="font-size:0.97em;color:#FFFFFF;margin-top:0.1em;">Figure 2: Interactive industrial-price scatterplot with the same y-axis range and hover details, using IEA Table 5.3.1 excluding taxes.</div>
+</div>
 
 ### Key Observations
 
-- **Color Coding**: Each country has a unique color for easy identification
-- **Temporal Progression**: Earlier years (2000) appear more transparent, while recent years (2020) are fully opaque
-- **Data Points**: 205 total observations across 10 countries
-- **Axis Ranges**: 
-  - X-axis: Nuclear capacity from 0% to ~80% of generation
-  - Y-axis: Electricity prices from €0 to ~0.30/kWh
+
+I have fitted regression lines to both plots out of interest. The industrial price does not show any correlation between nuclear generation and price, all the while a higher percentage of nuclear generation correlates negatively with household electricity prices. The revelation is that this correlation, albeit having a weak explanatory power, is statistically significant. 
+
+Of course it would be borderline idiotic to fit such a simple model to electricity prices as there are a myriad more variables that affect them (and nuclear generation for that matter). Neither regressions should be read as a strong model of electricity prices or as any form of causal evidence, it was just a fun experiment. 
 
 ## Combined Grid View: All Countries Time Series
 
-![Combined Grid of All Countries](/assets/images/All_Countries_Combined.png)
+<div style="text-align:left;margin-bottom:1em;">
+  <img src="{{ '/assets/images/All_Countries_Combined.png' | relative_url }}" alt="Combined Grid of All Countries" style="max-width:100%;margin-bottom:0.2em;">
+  <div style="font-size:0.97em;color:#FFFFFF;margin-top:0.1em;">Figure 3: Grid layout showing individual nuclear % (left axis, blue) and household electricity prices (right axis, pink) for each country from 2000-2020.</div>
+</div>
 
-**Figure 2**: Grid layout showing individual nuclear % (left axis, blue) and electricity prices (right axis, pink) for each country from 2000-2020.
+<div style="text-align:left;margin-bottom:1em;">
+  <img src="{{ '/assets/images/All_Countries_Combined_Industrial.png' | relative_url }}" alt="Combined Grid of All Countries Industrial" style="max-width:100%;margin-bottom:0.2em;">
+  <div style="font-size:0.97em;color:#FFFFFF;margin-top:0.1em;">Figure 4: Grid layout showing individual nuclear % (left axis, blue) and industrial electricity prices (right axis, pink) for each country from 2000-2020.</div>
+</div>
 
 ### What to Look For
 
 - **Blue Line/Dots**: Nuclear capacity as percentage of generation
-- **Pink Line/Dots**: Electricity price in €/kWh (excluding taxes)
+- **Pink Line/Dots**: Household or industrial electricity price in €/kWh (excluding taxes)
 - **Trends**: 
   - Stable nuclear percentages in most countries (except Germany)
-  - Rising price volatility after 2008
+  - Rising price volatility after 2008 (external factors of course)
   - Country-specific patterns in technology transitions
-
-## Country-by-Country Analysis
-
-### High Nuclear Capacity Countries
-- **France**: ~70-80% nuclear (most stable)
-- **Belgium**: ~50-55% nuclear
-- **Slovakia**: ~50-55% nuclear
-- **Hungary**: ~35-40% nuclear
-
-### Medium Nuclear Capacity Countries
-- **Finland**: ~25-30% nuclear
-- **Sweden**: 30-40% nuclear (excluded: data starts 2007)
-- **Germany**: Declining from 30% to near 0% (Energiewende)
-
-### Lower Nuclear Capacity Countries
-- **Spain**: ~15-20% nuclear (declining)
-- **Switzerland**: ~35-40% nuclear
-- **United Kingdom**: ~15-25% nuclear (increasing)
-- **Netherlands**: ~3-5% nuclear
-
-## Price Observations
-
-- **General Range**: €0.10-0.25 per kWh (excluding taxes)
-- **Most Volatile**: Germany (significant price increase post-2008)
-- **Most Stable**: Switzerland and Hungary
-- **Price Spikes**: Most countries show increases around 2007-2008 financial crisis
 
 ## Correlation Analysis
 
 While not a formal regression, visual inspection suggests:
 - **Weak Direct Correlation**: Higher nuclear % does not always mean lower prices
-- **Country-Specific Factors**: Market structure, grid operators, and policy matter significantly
+- **Country-Specific Factors**: Market structure, grid operators, and policy matter significantly (of course)
 - **Temporal Factors**: Global energy prices and exchange rates affect all countries similarly
 
-## Interactive Observations
 
-1. **France's Stability**: Despite highest nuclear %, shows moderate price volatility
-2. **Germany's Transition**: Clear nuclear phase-out visible (declining blue line)
-3. **Belgium & Slovakia**: Similar nuclear models but different price patterns
-4. **Price Clustering**: Many countries converge to similar prices by 2020
-
----
-
-**Data Quality**: 
-- 205 data points from 10 countries
-- 2000-2020 period (21 years)
-- Complete for all countries except those noted as excluded
-
-**Excluded Countries**:
-- Sweden: Data only available from 2007 onwards
-- Other European countries: Either no nuclear generation or missing price data
-
-**Data Sources**:
-- Ember: Nuclear generation statistics
-- UK Government IEA Table 5.5.1: Electricity prices (excl. taxes)
-- Historical exchange rates for GBP to EUR conversion

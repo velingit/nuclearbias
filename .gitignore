@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.Python
+.venv/
+.vscode/
+.idea/
+
+jekyll_site/.bundle/
+jekyll_site/.jekyll-cache/
+jekyll_site/.jekyll-metadata
+jekyll_site/_site/
+jekyll_site/vendor/
+
+Thumbs.db
+.DS_Store

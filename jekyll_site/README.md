@@ -12,7 +12,7 @@ This Jekyll website presents an interactive analysis of European energy data, fo
 
 ## Live Site
 
-[View the analysis →](https://yourusername.github.io/energy-analysis/)
+[View the analysis →](https://velingit.github.io/nuclearbias/)
 
 ## Pages
 
@@ -124,7 +124,7 @@ Data sources are cited in the Methodology and About pages. Visit those pages for
 
 ---
 
-**Last Updated**: 2024
+**Last Updated**: March 6, 2026
 **Time Period Covered**: 2000-2020
 **Countries Analyzed**: 10
 **Data Points**: 205 (scatterplot) + continuous time-series in country charts

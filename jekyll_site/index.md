@@ -8,65 +8,48 @@ permalink: /
 
 ## Project Overview
 
-This analysis explores the relationship between nuclear capacity as a percentage of electricity generation and electricity prices across major European countries during the period 2000-2020. The project aims to provide insights into how different countries' nuclear strategies correlate with their electricity pricing.
-
-## Key Questions
-
-1. **Is there a correlation between nuclear capacity and electricity prices?**
-   - Countries with higher nuclear capacity percentages often have different electricity pricing structures
-   - This analysis examines whether this relationship is consistent across Europe
-
-2. **How has this relationship evolved over time?**
-   - The data spans two decades (2000-2020), allowing us to observe trends
-   - Different countries' energy transitions are visible through this lens
-
-3. **What can we learn from individual country cases?**
-   - Germany's transition away from nuclear energy
-   - France's continued reliance on nuclear power
-   - How these strategies affect pricing and grid stability
+This analysis was done because I was looking for a project and since I was born next to a nuclear power plant, I have personally benefitted from nuclear energy. As a result, I have lived my whole life with a nuclear bias. Since I came to Germany, I have met many opposing views. From worries about storage to outright claims that it is not a good energy source. With this research, I aim to clear my nuclear bias and understand its problems. It is an ongoing project and will evolve when I get more ideas.  
 
 ## Dataset
 
-- **Nuclear Generation Data**: Ember's yearly electricity generation dataset
-- **Electricity Prices**: UK Government IEA Table 5.5.1 (prices excluding taxes)
-- **Exchange Rates**: Historical GBP to EUR conversion rates
-- **Coverage**: 10 European countries with complete data from 2000-2020
+- **Nuclear Generation Data**: [Ember's yearly electricity generation dataset](https://ember-energy.org/data/yearly-electricity-data/)
+- **Electricity Prices**: [UK Government IEA Table 5.5.1](https://www.gov.uk/government/statistical-data-sets/iea-table-5-5-1) (prices excluding taxes)
+
+- **Exchange Rates**: Historical GBP to EUR conversion rates from the electricity prices table
+- **Coverage**: 10 European countries with complete data from 2000-2020. Countries included had complete data in both datasets and have generated nuclear energy in the period.
 - **Countries Included**: Belgium, Finland, France, Germany, Hungary, Netherlands, Slovakia, Spain, Switzerland, United Kingdom
 
 ## Visualizations
 
-We have created multiple visualizations to explore this data:
+The project currently highlights five core visualizations. Each title links to the page where that visualization is discussed in more detail.
 
-1. **Nuclear & Price Scatterplot**: All data points across all countries and years, color-coded by country with temporal progression shown through opacity
-2. **Combined Grid Charts**: Individual time-series charts for each country showing dual-axis visualization (nuclear % and price)
-3. **Individual Country Charts**: Detailed analysis for each country
+### [Household Regression Scatterplot]({{ '/nuclear-analysis/' | relative_url }})
 
-## Navigate the Site
+<div style="text-align:left;max-width:980px;margin:0 auto 1.5em auto;">
+	{% include scatterplot_household.html %}
+</div>
 
-- **[Nuclear & Price Analysis](nuclear-analysis/)** - Explore the relationship between nuclear capacity and electricity prices
-- **[Germany Case Study](germany/)** - In-depth examination of Germany's energy transition
-- **[Methodology](methodology/)** - Technical details about data processing and analysis methods
-- **[About](about/)** - Information about this project and data sources
+### [Industrial Regression Scatterplot]({{ '/nuclear-analysis/' | relative_url }})
 
-## Key Findings
+<div style="text-align:left;max-width:980px;margin:0 auto 1.5em auto;">
+	{% include scatterplot_industrial.html %}
+</div>
 
-*(These will be updated as analysis progresses)*
+### [Interactive Time Series]({{ '/nuclear-analysis/time-series/' | relative_url }})
 
-- Countries with significant nuclear generation (France, Belgium) show different price patterns than those without (Spain, Germany)
-- Nuclear capacity percentage generally remained stable in most countries during 2000-2020
-- Electricity prices showed more volatility, particularly after 2008 financial crisis
+<div style="text-align:left;max-width:1100px;margin:0 auto 1.5em auto;">
+	{% include plotly_timeseries.html %}
+</div>
 
-## Next Steps
+### [Combined Grid: Household Prices]({{ '/nuclear-analysis/' | relative_url }})
 
-Future expansions of this analysis could include:
-- Extended time period (2020-2025)
-- Additional European countries
-- Renewable energy integration analysis
-- Grid stability metrics
-- Carbon emission correlation
+<div style="text-align:left;max-width:1100px;margin:0 auto 1.5em auto;">
+	<img src="{{ '/assets/images/All_Countries_Combined.png' | relative_url }}" alt="Combined Grid of All Countries Household" style="max-width:100%;margin-bottom:0.2em;">
+</div>
 
----
+### [Combined Grid: Industrial Prices]({{ '/nuclear-analysis/' | relative_url }})
 
-**Last Updated**: March 6, 2026
+<div style="text-align:left;max-width:1100px;margin:0 auto 1.5em auto;">
+	<img src="{{ '/assets/images/All_Countries_Combined_Industrial.png' | relative_url }}" alt="Combined Grid of All Countries Industrial" style="max-width:100%;margin-bottom:0.2em;">
+</div>
 
-**Data Period**: 2000-2020

@@ -104,7 +104,7 @@ bundle install
 # Start local server
 bundle exec jekyll serve
 
-# View at http://localhost:4000
+# View at http://Ys:4000
 ```
 
 ## After Deployment

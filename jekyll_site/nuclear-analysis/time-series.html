@@ -1,0 +1,15 @@
+---
+layout: default
+title: Interactive Time Series
+permalink: /nuclear-analysis/time-series/
+---
+
+<h1>Interactive Time Series: Nuclear Capacity & Electricity Prices</h1>
+
+<p>Explore the evolution of nuclear output and electricity prices over time for each country. The selector lets you switch between household prices from IEA Table 5.5.1 and industrial prices from IEA Table 5.3.1.</p>
+
+<p>Both price series use the excluding-tax sheets and are converted from pence per kWh into euros per kWh by dividing by 100 to convert pence to pounds and then multiplying by the country-specific exchange rate from the workbook's Exchange rates sheet.</p>
+
+{% include plotly_timeseries.html %}
+
+<blockquote><b>Tip:</b> Click on country names in the legend to show/hide their data. Hover over points for details.</blockquote>

@@ -4,288 +4,122 @@ title: Methodology
 permalink: /methodology/
 ---
 
-# Methodology
+# About This Project
 
-## Data Sources
+My reason for choosing Germany is that I had moved to the country in 2019 and prior to that was somewhat unaware of the general disdain there is around here for nuclear. There was little theoretical reasoning besides an argument with a friend which ended without a proper conclusion. Because of that, I wanted to explore the energy sector in more detail and hopefully strengthen my arguments going forward. The inclusion of other countries in the mix is done because first data was available and I was interested and second as a reference. 
 
-### 1. Nuclear Generation Data
-**Source**: Ember - Yearly Electricity Generation Dataset
+I had firstly thought about creating a synthetic control in order to prove once and for all how much better nuclear is, but upon thinking about it for more than 90 seconds, I realized that it does not in any way achieve what I am aiming to do. 
 
-- **File**: `europe_yearly_full_release_long_format.csv`
-- **Coverage**: All European countries, 1990-2025
-- **Metrics**:
-  - Total electricity generation (TWh)
-  - Nuclear generation (TWh)
-  - Other fuel sources (coal, gas, renewables, etc.)
-- **Data Quality**: Complete, regularly updated, high reliability
+I first started out looking at the relation of energy production and household prices excluding taxes, I will expand it to wholesale prices too, but without a big educational investment from my side, I do not believe I can infer information about the economic effects of the phase-out which is its most critiqued point internationally. 
 
-### 2. Electricity Price Data
-**Source**: UK Government - IEA Table 5.5.1 - Domestic Electricity Prices
+I had decided on the year 2000 as a starting point, since that's around when the first liberalization package was impelemented in Western Europe and reliable data was available (1996). Furthermore, my cutoff is 2020, because the pandemic and the gas shortage had effects on electricity outside of the scope of this naive throwing of assumptions I am doing.  
 
-- **File**: `table_551.xlsx`
-- **Coverage**: Major developed countries, 1979-2025
-- **Units**: Pence per kWh (GBP base currency)
-- **Tax Treatment**: Two variants provided (with/without taxes)
-- **This Analysis**: Uses prices excluding taxes
+## Project Objective
 
-### 3. Exchange Rates
-**Source**: OECD Historical Exchange Rates
+This project investigates the relationship between nuclear power's role in electricity generation and electricity pricing across European countries during the period 2000-2020. By combining generation statistics with price data, we aim to understand how different countries' nuclear energy strategies correlate with their electricity market outcomes.
 
-- **File**: Excel sheet within `table_551.xlsx`
-- **Conversion Method**: GBP to EUR using historical annual averages
-- **Conversion Formula**: 
-  - 1 EUR = 13.7603 Austrian Schillings (ATS)
-  - Price (EUR/kWh) = [Price (pence) / 100] × [Austria FX Rate / 13.7603]
+## Research Questions
 
-## Data Preparation
+1. **Does nuclear capacity percentage correlate with electricity prices?**
+2. **How stable or volatile are these relationships across different countries?**
+3. **What can we learn from different national strategies?**
+4. **How does the Energiewende (Germany's energy transition) compare internationally?**
 
-### Step 1: Filter Time Period
-- **Start Year**: 2000 (post-millennium, post-regulatory reforms)
-- **End Year**: 2020 (before data quality issues in 2021+)
-- **Rationale**: Captures post-deregulation European energy market
+## Visualization Approach
 
-### Step 2: Select Countries
-- **Criterion**: Must have both complete nuclear generation and electricity price data for entire period
-- **Method**: 
-  1. Identify all European countries in Ember dataset
-  2. Cross-reference with IEA price data
-  3. Filter for countries with data from 2000-2020
-  4. Exclude aggregates (EU, Europe region, etc.)
+### 1. The Scatterplot
 
-**Final Selection**: 10 countries
-- Belgium
-- Finland
-- France
-- Germany
-- Hungary
-- Netherlands
-- Slovakia
-- Spain
-- Switzerland
-- United Kingdom
+Shows all 205 data points across 10 countries and 21 years in a single visualization:
+- **X-axis**: Nuclear capacity percentage (0-80%)
+- **Y-axis**: Electricity price (€0.08-0.30/kWh)
+- **Color**: Country (unique color for each)
+- **Transparency**: Time dimension (fainter = older, solid = newer)
 
-**Excluded Countries** (26 total):
-- No nuclear generation: Austria, Denmark, Ireland, Italy, etc.
-- Missing price data: Bulgaria, Czechia, Lithuania, Romania, Slovenia, Ukraine
-- Incomplete data: Sweden (data starts 2007)
+This allows viewers to:
+- See overall distribution and relationships
+- Identify country clusters and patterns
+- Notice temporal trends through opacity changes
 
-### Step 3: Data Units and Normalization
+### 2. The Grid View
 
-**Nuclear Capacity Percentage**:
-```
-Nuclear % = (Nuclear Generation TWh / Total Generation TWh) × 100
-```
-- Units: Percentage (%)
-- Range: 0-100%
-- Excludes years with zero nuclear generation
+Shows individual country trends side-by-side:
+- 10 subplots, one per country
+- Dual-axis design (nuclear % and price)
+- 21 years of data per country
+- Easy comparison between countries
 
-**Electricity Prices**:
-```
-Price (EUR/kWh) = [Price (pence) / 100] × Exchange Rate (GBP/EUR)
-```
-- Starting units: British pence per kWh
-- Conversion to euros for consistency
-- Excludes taxes (cleaner comparison across countries with different tax structures)
+This allows viewers to:
+- Understand each country's specific trajectory
+- Compare growth, decline, and stability patterns
+- Identify inflection points and transitions
 
-### Step 4: Data Validation
+### 3. Individual Country Charts
 
-**Checks Applied**:
-1. No negative values
-2. Nuclear % ≤ 100%
-3. No missing data points within 2000-2020
-4. Exchange rates > 0
-5. Electricity prices > 0
+Full-sized, detailed charts for focused analysis on specific countries, particularly Germany's unique transition.
 
-**Data Quality Result**: 205 valid data points from 10 countries, 21 years each
+## Why This Analysis Could Matter
 
-## Calculations
+### For Energy Policy
+- Understanding the relationship between generation mix and pricing
+- Informing decisions about nuclear phase-out or expansion
+- Cost-benefit analysis of energy transitions
 
-### Nuclear Capacity as % of Generation
-```
-Nuclear_Percent = (Nuclear_Generation_TWh / Total_Generation_TWh) × 100
-```
-- Only includes years where nuclear generation > 0
-- Handles years where country had no nuclear generation
+### For Climate Action
+- Nuclear power's role in decarbonization
+- Trade-offs between pricing and emissions
+- Alternative paths to zero-carbon grids
 
-### Price Conversion: GBP to EUR
-```
-Exchange_Rate_GBP_to_EUR = Austria_FX_Rate / 13.7603
+### For Citizens
+- Understanding electricity costs
+- Seeing impact of national energy policies
+- Opportunity to evaluate trade-offs
 
-Price_EUR = (Price_GBP_pence / 100) × Exchange_Rate_GBP_to_EUR
-```
 
-**Rationale for Conversion Method**:
-- Direct GBP/EUR rates unavailable for full time period
-- Used ATS (Austrian Schilling) as proxy:
-  - Austria maintained stable ATS/EUR rate (13.7603) upon Euro adoption
-  - ATS/GBP rates available from 1979 onward
-- Provides consistent historical conversion
+### Observations
 
-## Visualization Methods
+1. **No Universal Relationship**: Countries with similar nuclear percentages can have very different prices
+2. **Policy Impact**: Germany's phase-out clearly visible (2011-2020)
+3. **Price Volatility**: Increased after 2008 financial crisis across all countries
+4. **Stability of Nuclear**: Once built, nuclear capacity remains relatively stable
 
-### Scatterplot: Nuclear % vs Price (All Countries)
+## Methodology Highlights
 
-**Design**:
-- X-axis: Nuclear capacity percentage (0-100%)
-- Y-axis: Electricity price (€/kWh)
-- Color: Country (one color per country)
-- Opacity: Time progression
-  - Min opacity (0.3): Year 2000
-  - Max opacity (0.95): Year 2020
-  - Linear interpolation between
+- **Time Period**: 2000-2020 for data availability and quality
+- **Country Selection**: Only countries with complete data across all 21 years (excl. Belgium with missing price data 2003-2007)
+- **Price Standardization**: Converted to EUR, excluded taxes, used historical rates from same document
 
-**Purpose**: Show relationship across all data points and countries
+### Important Caveats
 
-**Data Points**: 205 total
+- Electricity prices are complex
+- Germany's price rise has many causes (not just nuclear phase-out)
+- Exchange rates affect price comparisons
+- National statistics may hide regional variation
 
-### Grid Charts: Individual Country Time Series
+### Potential Expansions
 
-**Design**:
-- Subplots: One per country (10 total)
-- Primary Y-axis (left, blue): Nuclear % of generation
-- Secondary Y-axis (right, pink): Electricity price (€/kWh)
-- X-axis: Year (2000-2020)
+1. Inclusion of more variables for a more encompassing model (amongst which eg. CO2 generation, battery availability)
 
-**Purpose**: Visualize temporal trends within each country
+2. Deeper Dives:
+   - Regional analysis (sub-national) (I'm also interested in quality of life in relation to nuclear power plant proximity)
+   - Seasonal patterns 
 
-**Key Elements**:
-- Blue line with dots: Nuclear capacity trend
-- Pink line with dots: Price trend
-- Filled areas (semi-transparent): Visual emphasis
-- Grid lines: Year reference
-- Country title: Clear identification
+## References & Resources
 
-### Individual Country Charts
+### Data Sources
+- [Ember Global Electricity Review](https://ember-climate.org/)
+- [UK Government Energy Price Statistics](https://www.gov.uk/government/statistics)
+- [OECD Statistics](https://stats.oecd.org/)
 
-**Design**: Full-sized version of grid charts for detailed analysis
+### Energy Policy Resources
+- Nuclear Energy Agency (NEA)
+- International Energy Agency (IEA)
+- European Union - Energy Policy
+- National energy agencies and ministries
 
-**Purpose**: Detailed examination of specific country dynamics
-
-## Technical Implementation
-
-### Software Stack
-- **Python 3.x**
-- **Libraries**:
-  - `pandas`: Data manipulation and analysis
-  - `matplotlib`: Visualization
-  - `openpyxl`: Excel file reading
-  - `numpy`: Numerical operations
-
-### Python Scripts
-
-1. **`scatterplot_nuclear_vs_price.py`**
-   - Generates scatterplot with all countries
-   - Opacity based on year
-   - Color-coded by country
-
-2. **`generate_european_charts.py`**
-   - Generates individual country charts
-   - Generates combined grid view
-   - Handles data filtering and validation
-
-### Data Processing Flow
-
-```
-Raw Data (CSV, Excel)
-        ↓
-Filter by:
-  - Time period (2000-2020)
-  - European countries
-  - Complete data availability
-        ↓
-Convert units:
-  - Calculate nuclear %
-  - Convert prices to EUR
-        ↓
-Validate data:
-  - Check ranges
-  - Handle missing values
-        ↓
-Generate visualizations:
-  - Scatterplot
-  - Grid charts
-  - Individual charts
-```
-
-## Limitations and Caveats
-
-### Data Limitations
-
-1. **Price Data**:
-   - Based on IEA statistics, primarily developed countries
-   - Excludes taxes (different by country)
-   - Historical rates used for GBP/EUR conversion
-
-2. **Generation Data**:
-   - Aggregate national statistics (doesn't capture regional variation)
-   - Some countries show rounding in original data
-
-3. **Time Period**:
-   - 2000-2020 chosen to maximize data availability
-   - Excludes recent years (2021-2025)
-
-### Analytical Limitations
-
-1. **Correlation ≠ Causation**:
-   - Visual clustering doesn't imply causal relationships
-   - Multiple factors affect electricity prices (fuel costs, regulation, grid infrastructure)
-
-2. **Confounding Variables** (not captured):
-   - Grid infrastructure age
-   - Regulatory framework
-   - Market structure
-   - Geographic differences
-   - Weather patterns (affecting renewables and demand)
-
-3. **Exchange Rate Impact**:
-   - GBP/EUR conversion affects absolute prices
-   - Relative patterns still valid
-
-### Country-Specific Notes
-
-- **Germany**: Experienced major nuclear phase-out (2011-2020)
-- **France**: Stable high nuclear use (baseline comparison)
-- **UK**: Increasing nuclear % due to refurbishment
-- **Spain**: Declining nuclear (policy choice)
-
-## Reproducibility
-
-### To Regenerate This Analysis
-
-1. **Required Files**:
-   - `europe_yearly_full_release_long_format.csv` (Ember)
-   - `table_551.xlsx` (IEA prices and exchange rates)
-
-2. **Python Scripts**:
-   ```bash
-   python scatterplot_nuclear_vs_price.py
-   python generate_european_charts.py
-   ```
-
-3. **Output**:
-   - PNG files in `nuclear_vs_price_scatterplot.png`
-   - Individual country charts in `european_charts/` directory
-
-### Version Information
-
-- Python: 3.8+
-- pandas: 1.3+
-- matplotlib: 3.4+
-- openpyxl: 3.5+
-
-## Future Improvements
-
-1. **Statistical Analysis**: Formal regression analysis with confidence intervals
-2. **Expanded Period**: Include 2020-2025 data
-3. **Additional Metrics**: Carbon emissions, grid stability, storage capacity
-4. **Interactive Visualizations**: Plotly/Bokeh for web-based exploration
-5. **Regional Analysis**: Sub-national data where available
-6. **Renewable Integration**: Detailed renewable generation tracking
+### Related Research
+- Decarbonization pathways literature
+- Nuclear economics studies
+- European electricity market analyses
+- Energy transition case studies
 
 ---
-
-**Methodology Version**: 1.0
-
-**Last Updated**: March 6, 2026
-
-**Authors**: Energy Analysis Team

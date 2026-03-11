@@ -1,5 +1,4 @@
 # Ignore Ruby/Bundler files
-Gemfile.lock
 .bundle/
 vendor/
 
