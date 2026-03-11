@@ -16,7 +16,7 @@ I had decided on the year 2000 as a starting point, since that's around when the
 
 ## Project Objective
 
-This project investigates the relationship between nuclear power's role in electricity generation and electricity pricing across European countries during the period 2000-2020. By combining generation statistics with price data, we aim to understand how different countries' nuclear energy strategies correlate with their electricity market outcomes.
+This project investigates the relationship between nuclear power's role in electricity generation and electricity pricing across European countries during the period 2000-2020. By combining generation statistics with price data, I aim to understand how different countries' nuclear energy strategies correlate with their electricity market outcomes.
 
 ## Research Questions
 
