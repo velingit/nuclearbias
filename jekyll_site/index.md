@@ -4,8 +4,6 @@ title: Home
 permalink: /
 ---
 
-# Welcome to the European Nuclear Energy Analysis
-
 ## Project Overview
 
 This analysis was done because I was looking for a project and since I was born next to a nuclear power plant, I have personally benefitted from nuclear energy. As a result, I have lived my whole life with a nuclear bias. Since I came to Germany, I have met many opposing views. From worries about storage to outright claims that it is not a good energy source. With this research, I aim to clear my nuclear bias and understand its problems. It is an ongoing project and will evolve when I get more ideas.  
