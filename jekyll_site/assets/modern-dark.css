@@ -81,6 +81,11 @@ nav ul li a.active, nav ul li a:hover {
   box-sizing: border-box;
 }
 
+.container li + li,
+main li + li {
+  margin-top: 0.35em;
+}
+
 h1, h2, h3, h4, h5, h6 {
   color: #fff;
   font-weight: 700;
