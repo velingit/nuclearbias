@@ -1,7 +1,7 @@
 # Site configuration
-title: European Nuclear Energy Analysis
+title: Velin Vaklinov Hristov
 description: Analysis of nuclear capacity percentage and electricity prices across European countries (2000-2020)
-baseurl: "/nuclearbias" # the subpath of your site (change 'energy-analysis' to your repo name)
+baseurl: "/nuclearbias" # the subpath of your site (use '/nuclearbias' for local development)
 url: "https://velingit.github.io" # the base hostname & protocol for your site
 repository: "velingit/nuclearbias"
 github_username: velingit
@@ -12,18 +12,17 @@ theme: minima
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
-  - jekyll-sitemap
 
 # Custom settings
 author:
-  name: Your Name
-  email: your.email@example.com
+  name: Velin Vaklinov Hristov
+  email: velinvhristov@gmail.com
 
 # Site locale for SEO
 lang: en_US
 
 # Timezone
-timezone: UTC
+timezone: Europe/Berlin
 
 # Exclude from processing
 exclude:
@@ -36,6 +35,7 @@ exclude:
   - vendor/ruby/
   - .gitignore
   - README.md
+  - assets/main.css
 
 # Keep files
 keep_files:
@@ -58,10 +58,3 @@ kramdown:
   input: GFM
   hard_wrap: false
   syntax_highlighter: rouge
-
-# SEO
-google_site_verification: ""  # Add your Google verification code if needed
-social:
-  name: European Nuclear Energy Analysis
-  links:
-    - https://github.com/yourusername/energy-analysis
