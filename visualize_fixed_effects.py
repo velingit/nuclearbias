@@ -127,14 +127,13 @@ def render_small_multiples(data_flat, country_details):
 
         reg_x = np.linspace(d['x_min'] - 1, d['x_max'] + 1, 50)
         reg_y = d['Slope'] * reg_x + d['Intercept']
-        line_color = ACCENT_NEGATIVE if d['Slope'] < 0 else ACCENT_POSITIVE
         dash = 'solid' if d['P_value'] < 0.05 else 'dot'
 
         fig.add_trace(
             go.Scatter(
                 x=reg_x, y=reg_y,
                 mode='lines',
-                line=dict(color=line_color, width=2.5, dash=dash),
+                line=dict(color=REGRESSION_COLOR, width=2.5, dash=dash),
                 hovertemplate=f'slope={d["Slope"]:+.5f}<extra></extra>',
                 showlegend=False,
             ),
@@ -162,7 +161,7 @@ def render_small_multiples(data_flat, country_details):
         title=dict(
             text='<b>Country-Level Regressions: Nuclear Share vs Household Electricity Price</b>'
                  '<br><sub>Solid line = significant (p&lt;0.05) · Dotted = not significant · '
-                 'Red = negative slope · Green = positive slope · Opacity = year (faint→solid = 2000→2020)</sub>',
+                 'Opacity = year (faint→solid = 2000→2020)</sub>',
             x=0.5, font=dict(size=15, color=TEXT_COLOR),
         ),
         height=520,

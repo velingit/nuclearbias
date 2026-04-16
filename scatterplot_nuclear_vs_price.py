@@ -259,6 +259,7 @@ def render_interactive_scatterplot(
     ylabel,
     footnote,
     axis_limits,
+    regression_dash='solid',
 ):
     countries = sorted(scatterplot_data['Country'].unique())
     colors = get_country_palette(len(countries))
@@ -318,7 +319,7 @@ def render_interactive_scatterplot(
             name='Linear regression',
             visible=True,
             showlegend=False,
-            line={'color': REGRESSION_LINE_COLOR, 'width': 3, 'dash': 'dash'},
+            line={'color': REGRESSION_LINE_COLOR, 'width': 3, 'dash': regression_dash},
             hovertemplate=(
                 '<b>Linear regression</b><br>'
                 'Predicted price: %{y:.3f} €/kWh<br>'
@@ -439,6 +440,7 @@ def main():
             'ylabel': 'Household Electricity Price (€/kWh) excl. taxes',
             'footnote': 'Data sources: Ember (nuclear generation %), UK Government IEA Table 5.5.1 (household electricity prices excl. taxes)',
             'label': 'household',
+            'regression_dash': 'solid',
         },
         {
             'price_category': 'industrial',
@@ -448,6 +450,7 @@ def main():
             'ylabel': 'Industrial Electricity Price (€/kWh) excl. taxes',
             'footnote': 'Data sources: Ember (nuclear generation %), UK Government IEA Table 5.3.1 (industrial electricity prices excl. taxes)',
             'label': 'industrial',
+            'regression_dash': 'dash',
         },
     ]
 
@@ -474,6 +477,7 @@ def main():
             config['ylabel'],
             config['footnote'],
             axis_limits,
+            regression_dash=config.get('regression_dash', 'solid'),
         )
         print(f"[+] {config['label'].capitalize()} scatterplot saved as: {output_path}")
         print(f"[+] {config['label'].capitalize()} interactive scatterplot saved as: {include_path}")
