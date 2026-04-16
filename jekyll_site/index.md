@@ -18,7 +18,7 @@ This analysis was done because I was looking for a project and since I was born 
 
 ## Visualizations
 
-The project currently highlights five core visualizations. Each title links to the page where that visualization is discussed in more detail.
+The project currently highlights six core visualizations. Each title links to the page where that visualization is discussed in more detail.
 
 ### [Household Regression Scatterplot]({{ '/nuclear-analysis/' | relative_url }})
 
@@ -30,6 +30,12 @@ The project currently highlights five core visualizations. Each title links to t
 
 <div style="text-align:left;max-width:980px;margin:0 auto 1.5em auto;">
 	{% include scatterplot_industrial.html %}
+</div>
+
+### [Country-Level Fixed-Effects Regressions]({{ '/nuclear-analysis/' | relative_url }})
+
+<div style="text-align:left;max-width:980px;margin:0 auto 1.5em auto;">
+	{% include fe_small_multiples.html %}
 </div>
 
 ### [Interactive Time Series]({{ '/nuclear-analysis/time-series/' | relative_url }})
