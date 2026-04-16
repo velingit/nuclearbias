@@ -257,140 +257,115 @@ def _build_regression_recalc_js(country_trace_count, div_id):
     return f"""
 <script>
 (function() {{
-  var nCountries = {country_trace_count};
-  var regIdx = nCountries;
-
-  function waitForPlot() {{
-    var gd = document.getElementById("{div_id}");
-    if (!gd || !gd._fullData || !gd._fullData.length) {{
-      setTimeout(waitForPlot, 100);
-      return;
-    }}
-    attachEvents(gd);
-  }}
+  var N = {country_trace_count};
+  var regIdx = N;
+  var divId = "{div_id}";
 
   function linreg(xs, ys) {{
     var n = xs.length;
     if (n < 3) return null;
-    var sx = 0, sy = 0, sxy = 0, sx2 = 0;
-    for (var i = 0; i < n; i++) {{
-      sx += xs[i]; sy += ys[i]; sxy += xs[i]*ys[i]; sx2 += xs[i]*xs[i];
-    }}
+    var sx=0,sy=0,sxy=0,sx2=0;
+    for (var i=0;i<n;i++) {{ sx+=xs[i]; sy+=ys[i]; sxy+=xs[i]*ys[i]; sx2+=xs[i]*xs[i]; }}
     var denom = n*sx2 - sx*sx;
-    if (Math.abs(denom) < 1e-12) return null;
-    var slope = (n*sxy - sx*sy) / denom;
-    var intercept = (sy - slope*sx) / n;
-    var yMean = sy / n;
-    var ssTot = 0, ssRes = 0;
-    for (var i = 0; i < n; i++) {{
-      ssTot += (ys[i] - yMean)*(ys[i] - yMean);
-      var pred = slope*xs[i] + intercept;
-      ssRes += (ys[i] - pred)*(ys[i] - pred);
+    if (Math.abs(denom)<1e-12) return null;
+    var slope = (n*sxy - sx*sy)/denom;
+    var intercept = (sy - slope*sx)/n;
+    var yMean = sy/n, ssTot=0, ssRes=0;
+    for (var i=0;i<n;i++) {{
+      ssTot += (ys[i]-yMean)*(ys[i]-yMean);
+      var pred = slope*xs[i]+intercept;
+      ssRes += (ys[i]-pred)*(ys[i]-pred);
     }}
-    var r2 = ssTot > 0 ? 1 - ssRes/ssTot : 0;
-    var se = Math.sqrt(ssRes / (n - 2));
-    var seSlope = se / Math.sqrt(sx2 - sx*sx/n);
-    var tStat = Math.abs(slope / seSlope);
-    var df = n - 2;
-    var p = tpvalue(tStat, df);
-    return {{slope: slope, intercept: intercept, r2: r2, p: p, n: n}};
+    var r2 = ssTot>0 ? 1-ssRes/ssTot : 0;
+    var se = Math.sqrt(ssRes/(n-2));
+    var seS = se/Math.sqrt(sx2-sx*sx/n);
+    var tS = Math.abs(slope/seS);
+    var pv = tpv(tS, n-2);
+    return {{slope:slope, intercept:intercept, r2:r2, p:pv, n:n}};
   }}
-
-  function tpvalue(t, df) {{
-    var x = df / (df + t*t);
-    return betainc(df/2, 0.5, x);
+  function tpv(t,df) {{ return betai(0.5,df/2,t*t/(df+t*t)); }}
+  function betai(a,b,x) {{
+    if(x<=0)return 1; if(x>=1)return 0;
+    var bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));
+    if(x<(a+1)/(a+b+2)) return 1-bt*cf(a,b,x)/a;
+    return bt*cf(b,a,1-x)/b;
   }}
-
-  function betainc(a, b, x) {{
-    if (x < 0 || x > 1) return 0;
-    if (x === 0) return 1;
-    if (x === 1) return 0;
-    var bt = Math.exp(lgamma(a+b) - lgamma(a) - lgamma(b) + a*Math.log(x) + b*Math.log(1-x));
-    if (x < (a+1)/(a+b+2)) return 1 - bt * cfrac(a, b, x) / a;
-    return bt * cfrac(b, a, 1-x) / b;
-  }}
-
-  function cfrac(a, b, x) {{
-    var maxIter = 200, eps = 1e-10;
-    var am = 1, bm = 1, az = 1;
-    var qab = a + b, qap = a + 1, qam = a - 1;
-    var bz = 1 - qab * x / qap;
-    for (var m = 1; m <= maxIter; m++) {{
-      var em = m, tem = em + em;
-      var d = em*(b-m)*x / ((qam+tem)*(a+tem));
-      var ap = az + d*am; var bp = bz + d*bm;
-      d = -(a+em)*(qab+em)*x / ((a+tem)*(qap+tem));
-      var app = ap + d*az; var bpp = bp + d*bz;
-      var oldaz = az;
-      am = ap/bpp; bm = bp/bpp; az = app/bpp; bz = 1;
-      if (Math.abs(az - oldaz) < eps*Math.abs(az)) return az;
+  function cf(a,b,x) {{
+    var am=1,bm=1,az=1,qab=a+b,qap=a+1,qam=a-1,bz=1-qab*x/qap;
+    for(var m=1;m<=200;m++) {{
+      var em=m,tem=2*em;
+      var d=em*(b-m)*x/((qam+tem)*(a+tem));
+      var ap=az+d*am,bp=bz+d*bm;
+      d=-(a+em)*(qab+em)*x/((a+tem)*(qap+tem));
+      var app=ap+d*az,bpp=bp+d*bz,old=az;
+      am=ap/bpp;bm=bp/bpp;az=app/bpp;bz=1;
+      if(Math.abs(az-old)<1e-10*Math.abs(az))return az;
     }}
     return az;
   }}
-
-  function lgamma(x) {{
-    var c = [76.18009172947146,-86.50532032941677,24.01409824083091,
-             -1.231739572450155,0.001208650973866179,-5.395239384953e-06];
-    var y = x, tmp = x + 5.5;
-    tmp -= (x+0.5)*Math.log(tmp);
-    var ser = 1.000000000190015;
-    for (var j = 0; j < 6; j++) ser += c[j] / ++y;
-    return -tmp + Math.log(2.5066282746310005*ser/x);
+  function lgam(x) {{
+    var c=[76.18009172947146,-86.50532032941677,24.01409824083091,
+           -1.231739572450155,0.001208650973866179,-5.395239384953e-06];
+    var y=x,tmp=x+5.5; tmp-=(x+0.5)*Math.log(tmp);
+    var ser=1.000000000190015;
+    for(var j=0;j<6;j++) ser+=c[j]/ ++y;
+    return -tmp+Math.log(2.5066282746310005*ser/x);
   }}
 
-  function attachEvents(gd) {{
-    function updateRegression() {{
-      var fd = gd._fullData;
-      var xs = [], ys = [];
-      for (var i = 0; i < nCountries; i++) {{
-        if (fd[i].visible === 'legendonly' || fd[i].visible === false) continue;
-        var xArr = fd[i].x;
-        var yArr = fd[i].y;
-        for (var j = 0; j < xArr.length; j++) {{
-          xs.push(xArr[j]);
-          ys.push(yArr[j]);
-        }}
-      }}
-      var reg = linreg(xs, ys);
-      if (!reg) return;
-      var xMin = Infinity, xMax = -Infinity;
-      for (var k = 0; k < xs.length; k++) {{
-        if (xs[k] < xMin) xMin = xs[k];
-        if (xs[k] > xMax) xMax = xs[k];
-      }}
-      var newX = [0, xMax * 1.05];
-      var newY = [reg.intercept, reg.slope * newX[1] + reg.intercept];
-      var sign = reg.intercept >= 0 ? '+' : '-';
-      var pText = reg.p < 0.001 ? 'p < 0.001' : 'p = ' + reg.p.toFixed(3);
-      var sigText = reg.p < 0.05 ? 'significant' : 'not significant';
-      var ann = gd.layout.annotations;
-      if (ann && ann.length > 0) {{
-        var oldText = ann[0].text;
-        var regPart = 'Linear regression<br>' +
-          'y = ' + reg.slope.toFixed(4) + 'x ' + sign + ' ' + Math.abs(reg.intercept).toFixed(4) + '<br>' +
-          'R\\u00b2 = ' + reg.r2.toFixed(3) + '<br>' +
-          pText + ' (' + sigText + ')';
-        var parts = oldText.split('Linear regression');
-        var newAnn = parts[0] + regPart;
-        Plotly.update(gd,
-          {{x: [newX], y: [newY]}},
-          {{'annotations[0].text': newAnn}},
-          [regIdx]
-        );
-      }} else {{
-        Plotly.restyle(gd, {{x: [newX], y: [newY]}}, [regIdx]);
-      }}
+  function getVisKey(gd) {{
+    var s='';
+    for (var i=0;i<N;i++) {{
+      var v=gd.data[i].visible;
+      s+=(v==='legendonly'||v===false)?'0':'1';
     }}
-
-    gd.on('plotly_legendclick', function() {{
-      setTimeout(updateRegression, 100);
-    }});
-    gd.on('plotly_legenddoubleclick', function() {{
-      setTimeout(updateRegression, 100);
-    }});
+    return s;
   }}
 
-  waitForPlot();
+  function doRecalc(gd) {{
+    var fd = gd._fullData, xs=[], ys=[];
+    for (var i=0;i<N;i++) {{
+      if (fd[i].visible==='legendonly'||fd[i].visible===false) continue;
+      for (var j=0;j<fd[i].x.length;j++) {{ xs.push(fd[i].x[j]); ys.push(fd[i].y[j]); }}
+    }}
+    var reg = linreg(xs, ys);
+    if (!reg) return;
+    var xMax=0;
+    for (var k=0;k<xs.length;k++) if(xs[k]>xMax) xMax=xs[k];
+    var nX=[0, xMax*1.05], nY=[reg.intercept, reg.slope*nX[1]+reg.intercept];
+    var sign = reg.intercept>=0 ? '+' : '-';
+    var pT = reg.p<0.001 ? 'p < 0.001' : 'p = '+reg.p.toFixed(3);
+    var sT = reg.p<0.05 ? 'significant' : 'not significant';
+
+    Plotly.restyle(gd, {{x:[nX], y:[nY]}}, [regIdx]);
+
+    var ann = gd.layout.annotations;
+    if (ann && ann.length>0) {{
+      var rP = 'Linear regression<br>y = '+reg.slope.toFixed(4)+'x '+sign+' '+
+        Math.abs(reg.intercept).toFixed(4)+'<br>R\\u00b2 = '+reg.r2.toFixed(3)+
+        '<br>'+pT+' ('+sT+')';
+      var parts = ann[0].text.split('Linear regression');
+      Plotly.relayout(gd, {{'annotations[0].text': parts[0]+rP}});
+    }}
+  }}
+
+  function init() {{
+    var gd = document.getElementById(divId);
+    if (!gd || !gd._fullData || gd._fullData.length<=regIdx) {{
+      setTimeout(init, 200);
+      return;
+    }}
+    var lastVis = getVisKey(gd);
+    setInterval(function() {{
+      var cur = getVisKey(gd);
+      if (cur !== lastVis) {{
+        lastVis = cur;
+        doRecalc(gd);
+      }}
+    }}, 250);
+  }}
+
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
 }})();
 </script>
 """

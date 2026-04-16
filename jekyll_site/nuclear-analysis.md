@@ -11,6 +11,8 @@ permalink: /nuclear-analysis/
 This section presents the relationship between nuclear capacity (as a percentage of total generation) and electricity prices across 10 European countries included in our study. Data spans from 2000 to 2020.
 I leave all methodological explanations about price creation to the [Energy prices team from the IEA ](https://www.iea.org/data-and-statistics/data-product/energy-prices)  
 
+**Tip:** Click on any of the countries in the two regressions in order to remove them from the regression! 
+
 ## Scatterplot: Nuclear % vs Price (All Countries & FE Model)
 
 <div style="text-align:left;max-width:980px;margin:0 auto 1em auto;">

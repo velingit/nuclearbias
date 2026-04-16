@@ -20,6 +20,8 @@ This analysis was done because I was looking for a project and since I was born 
 
 The project currently highlights six core visualizations. Each title links to the page where that visualization is discussed in more detail.
 
+**Tip:** Click on any of the countries in the two regressions in order to remove them from the regression! 
+
 ### [Household Regression Scatterplot]({{ '/nuclear-analysis/' | relative_url }})
 
 <div style="text-align:left;max-width:980px;margin:0 auto 1.5em auto;">
