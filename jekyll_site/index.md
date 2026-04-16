@@ -24,13 +24,13 @@ The project currently highlights six core visualizations. Each title links to th
 
 ### [Household Regression Scatterplot]({{ '/nuclear-analysis/' | relative_url }})
 
-<div style="text-align:left;max-width:980px;margin:0 auto 1.5em auto;">
+<div style="text-align:left;max-width:980px;margin:0 auto 2.5em auto;">
 	{% include scatterplot_household.html %}
 </div>
 
 ### [Industrial Regression Scatterplot]({{ '/nuclear-analysis/' | relative_url }})
 
-<div style="text-align:left;max-width:980px;margin:0 auto 1.5em auto;">
+<div style="text-align:left;max-width:980px;margin:0 auto 2.5em auto;">
 	{% include scatterplot_industrial.html %}
 </div>
 

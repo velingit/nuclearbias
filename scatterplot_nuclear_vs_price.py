@@ -253,6 +253,71 @@ def render_scatterplot(scatterplot_data, filename, title, ylabel, footnote, axis
     return output_path, countries
 
 
+def _build_responsive_js(div_id):
+    return f"""
+<script>
+(function() {{
+  var divId = "{div_id}";
+  var applied = null;
+
+  function applyLayout() {{
+    var gd = document.getElementById(divId);
+    if (!gd || !gd.layout) return;
+    var w = window.innerWidth;
+    if (w <= 768 && applied !== 'mobile') {{
+      Plotly.relayout(gd, {{
+        'margin.r': 20,
+        'margin.l': 50,
+        'margin.b': 50,
+        'margin.t': 20,
+        'title.text': '',
+        'legend.x': 0.98,
+        'legend.y': 1.0,
+        'legend.xanchor': 'right',
+        'legend.yanchor': 'top',
+        'legend.bgcolor': 'rgba(24,33,43,0.85)',
+        'legend.font.size': 10,
+        'legend.title.font.size': 11,
+        'annotations[0].visible': false
+      }});
+      applied = 'mobile';
+    }} else if (w > 768 && applied !== 'desktop') {{
+      Plotly.relayout(gd, {{
+        'margin.r': 330,
+        'margin.l': 72,
+        'margin.b': 72,
+        'margin.t': 92,
+        'title.text': gd.layout._originalTitle || gd.layout.title.text,
+        'legend.x': 1.02,
+        'legend.y': 1.0,
+        'legend.xanchor': 'left',
+        'legend.yanchor': 'top',
+        'legend.bgcolor': '{LEGEND_BACKGROUND}',
+        'legend.font.size': 12,
+        'legend.title.font.size': 14,
+        'annotations[0].visible': true,
+        'title.x': 0.46,
+        'title.font.size': 13
+      }});
+      applied = 'desktop';
+    }}
+  }}
+
+  function init() {{
+    var gd = document.getElementById(divId);
+    if (!gd || !gd._fullData) {{ setTimeout(init, 200); return; }}
+    gd.layout._originalTitle = gd.layout.title.text;
+    applyLayout();
+    window.addEventListener('resize', applyLayout);
+  }}
+
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+}})();
+</script>
+"""
+
+
 def _build_regression_recalc_js(country_trace_count, div_id):
     return f"""
 <script>
@@ -448,8 +513,6 @@ def render_interactive_scatterplot(
     )
 
     country_trace_count = len(countries)
-    regression_hidden = [True] * country_trace_count + [False]
-    regression_visible = [True] * country_trace_count + [True]
 
     fig.update_layout(
         title={'text': title, 'x': 0.46, 'y': 0.97},
@@ -469,37 +532,10 @@ def render_interactive_scatterplot(
             'bordercolor': '#425268',
             'borderwidth': 1,
             'yanchor': 'top',
-            'y': 0.93,
+            'y': 1.0,
             'xanchor': 'left',
             'x': 1.02,
         },
-        updatemenus=[
-            {
-                'type': 'buttons',
-                'direction': 'left',
-                'x': 1.02,
-                'y': 1.01,
-                'xanchor': 'left',
-                'yanchor': 'top',
-                'showactive': False,
-                'bgcolor': '#223041',
-                'bordercolor': '#425268',
-                'font': {'color': TEXT_COLOR, 'size': 11},
-                'pad': {'r': 6, 't': 0, 'b': 0},
-                'buttons': [
-                    {
-                        'label': 'Regression off',
-                        'method': 'update',
-                        'args': [{'visible': regression_hidden}],
-                    },
-                    {
-                        'label': 'Regression on',
-                        'method': 'update',
-                        'args': [{'visible': regression_visible}],
-                    },
-                ],
-            }
-        ],
         xaxis={
             'title': 'Nuclear Capacity as % of Generation',
             'range': list(axis_limits['x']),
@@ -546,7 +582,8 @@ def render_interactive_scatterplot(
     div_id_match = re.search(r'<div id="([^"]+)" class="plotly-graph-div"', html)
     div_id = div_id_match.group(1) if div_id_match else ''
     recalc_js = _build_regression_recalc_js(country_trace_count, div_id)
-    html += recalc_js
+    responsive_js = _build_responsive_js(div_id)
+    html += recalc_js + responsive_js
 
     INCLUDE_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     output_path = INCLUDE_OUTPUT_DIR / include_filename
