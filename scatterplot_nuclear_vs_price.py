@@ -283,7 +283,7 @@ def _build_responsive_js(div_id):
       applied = 'mobile';
     }} else if (w > 768 && applied !== 'desktop') {{
       Plotly.relayout(gd, {{
-        'margin.r': 330,
+        'margin.r': 260,
         'margin.l': 72,
         'margin.b': 72,
         'margin.t': 92,
@@ -522,7 +522,7 @@ def render_interactive_scatterplot(
         paper_bgcolor=PAPER_BACKGROUND,
         plot_bgcolor=PLOT_BACKGROUND,
         font={'color': TEXT_COLOR, 'size': 13},
-        margin={'l': 72, 'r': 330, 't': 92, 'b': 72},
+        margin={'l': 72, 'r': 260, 't': 92, 'b': 72},
         legend={
             'title': {'text': 'Country'},
             'orientation': 'v',
