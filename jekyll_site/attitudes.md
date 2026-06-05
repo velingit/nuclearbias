@@ -1,74 +1,35 @@
 ---
 layout: default
-title: Home
-permalink: /
+title: Attitudes towards renewable energy
+permalink: /attitudes/
 ---
-
-
-Welcome to my site! Here I share projects and data explorations on topics I’m interested in.
-
----
-
-### Project Overview
-
-This analysis was done because I was looking for a project and since I was born next to a nuclear power plant, I have personally benefitted from nuclear energy. As a result, I have lived my whole life with a nuclear bias. Since I came to Germany, I have met many opposing views. From worries about storage to outright claims that it is not a good energy source. With this research, I aim to clear my nuclear bias step by step and understand its problems. It is an ongoing project and will evolve when I get more ideas.
-
-### Visualizations
-
-The project currently highlights six core visualizations. Each title links to the page where that visualization is discussed in more detail.
-
-**Tip:** Click on any of the country names on the right in the two regressions in order to remove them from the regression!
-
-<!-- Link to Attitudes project -->
-### [Attitudes towards Renewable Energy]({{ '/attitudes/' | relative_url }})
-
-A short exploration of how cosmopolitan attitudes and social dispositions relate to public support for renewables and climate policy across Europe. Click through for methods, findings, and short visual summaries.
-
-#### [Household Regression Scatterplot]({{ '/nuclear-analysis/' | relative_url }})
-
-<div style="text-align:left;max-width:980px;margin:0 auto 2.5em auto;">
-	{% include scatterplot_household.html %}
-</div>
-
-#### [Industrial Regression Scatterplot]({{ '/nuclear-analysis/' | relative_url }})
-
-<div style="text-align:left;max-width:980px;margin:0 auto 2.5em auto;">
-	{% include scatterplot_industrial.html %}
-</div>
-
-#### [Country-Level Fixed-Effects Regressions]({{ '/nuclear-analysis/' | relative_url }})
-
-<div style="text-align:left;max-width:980px;margin:0 auto 1.5em auto;">
-	{% include fe_small_multiples.html %}
-</div>
-
-### Dataset
-
-- **Nuclear Generation Data**: [Ember's yearly electricity generation dataset](https://ember-energy.org/data/yearly-electricity-data/)
-- **Electricity Prices**: [UK Government IEA Table 5.5.1](https://www.gov.uk/government/statistical-data-sets/international-industrial-energy-prices) (prices excluding taxes)
-- **Exchange Rates**: Historical GBP to EUR conversion rates from the electricity prices table
-- **Coverage**: 10 European countries with complete data from 2000-2020. Countries included had complete data in both datasets and have generated nuclear energy in the period.
-- **Countries Included**: Belgium, Finland, France, Germany, Hungary, Netherlands, Slovakia, Spain, Switzerland, United Kingdom
-
-#### [Interactive Time Series]({{ '/nuclear-analysis/time-series/' | relative_url }})
-
-<div style="text-align:left;max-width:1100px;margin:0 auto 1.5em auto;">
-	{% include plotly_timeseries.html %}
-</div>
-
-#### [Combined Grid: Household Prices]({{ '/nuclear-analysis/' | relative_url }})
-
-<div style="text-align:left;max-width:1100px;margin:0 auto 1.5em auto;">
-	<img src="{{ '/assets/images/All_Countries_Combined.png' | relative_url }}" alt="Combined Grid of All Countries Household" style="max-width:100%;margin-bottom:0.2em;">
-</div>
-
-#### [Combined Grid: Industrial Prices]({{ '/nuclear-analysis/' | relative_url }})
-
-<div style="text-align:left;max-width:1100px;margin:0 auto 1.5em auto;">
-	<img src="{{ '/assets/images/All_Countries_Combined_Industrial.png' | relative_url }}" alt="Combined Grid of All Countries Industrial" style="max-width:100%;margin-bottom:0.2em;">
-</div>
+# Cosmopolitan attitudes towards renewable energy in Europe
 
 In this short project I have looked at the [European Social Survey Round 8]() and specifically at the energy panel. I had the idea to compare cosmopolitanism with renewable support after reading [Bechtel et al. (2014)](https://onlinelibrary.wiley.com/doi/full/10.1111/ajps.12079) wherein they relate the concepts of altruism and cosmopolitanism with support for Eurozone bailouts in Germany. Their findings indicate that a strong predictor for said support is exactly the social disposition of voters. 
+
+To find out, I looked at two different types of climate policies:  
+*Soft Solidarity:* Subsidising renewable energy (feels like a win-win, "free" money). Operationalized through the support for subsidies question.  
+*Hard Solidarity:* Increasing taxes on fossil fuels. Operationalized through the taxes on fossil fuels question. 
+
+Besides that, I collected variables motivated by the general literature on identity politics and energy specific findings: age, rile, gender, years of education, feelings about household income, urban/rural divide, trust in politicians; worries about energy affordability. 
+
+I decided to look at those two because they seemed interesting and because it aligned with identity literature that I had read before. 
+Theoretical frameworks also suggest that people can hold nested identities: meaning they can be deeply attached to both their nation and to Europe at the same time without these feelings competing [(Medrano & Gutiérrez, 2001)](https://www.tandfonline.com/doi/abs/10.1080/01419870120063963). In that regard I was interested in what happens when one looks at feelings of European and national belonging, thus I included the first two variables, namely national and European attachment. 
+
+---
+
+<b> Results: </b> 
+European citizens are generally highly supportive of public subsidies for renewable energy, viewing it as a matter of technological efficiency that serves the general good. My models confirm that being attached to Europe predicts support for green subsidies. Being attached to your country also independently predicts support but the interaction of the two is not significant. 
+When policies don't demand direct personal sacrifice, national identity and European identity work together in harmony. There is no clash here.
+
+For a nested identifier, a citizen who loves both their country and Europe, their national identity acts as a brake on their willingness to pay for the climate through support of stronger fossil fuel taxes. When asked to make a  sacrifice perceived as personal, national identity mobilises in a protectionist direction, dampening the cosmopolitan, pro-climate effects of their European identity.
+
+  
+My models reveal two roadblocks green solidarity that go beyond identity and have been identified in [literature](https://www.europeansocialsurvey.org/sites/default/files/2023-06/ESS8_pawcer_climate_change.pdf):  
+
+People struggling to make ends meet, or those who are highly anxious that energy will become too expensive, are intensely opposed to fossil fuel taxes (more so than people with strong national attitudes).
+
+Urban and rural divide is very strong, as previously identified by [Balta-Ozkan & Gallo (2018)](https://www.sciencedirect.com/science/article/pii/S1364032117309620#bib41)
 
 <html>
 <head>
@@ -298,6 +259,4 @@ td {  }
     <td class="tdata summary summarydata" colspan="3">0.069 / 0.100</td>
     <td class="tdata summary summarydata" colspan="3">0.028 / 0.082</td>
   </tr>
-
-
 

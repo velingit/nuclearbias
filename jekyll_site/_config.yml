@@ -1,6 +1,6 @@
 # Site configuration
 title: Velin Vaklinov Hristov
-description: Analysis of nuclear capacity percentage and electricity prices across European countries (2000-2020)
+description: Different analyses of nuclear bias and wider energy topics. 
 baseurl: "/nuclearbias" # the subpath of your site (use '/nuclearbias' for local development)
 url: "https://velingit.github.io" # the base hostname & protocol for your site
 repository: "velingit/nuclearbias"
